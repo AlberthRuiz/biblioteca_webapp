@@ -1,4 +1,6 @@
-﻿@{
+﻿@using biblioteca_webapp.DTO
+@model AutorCreacionDTO
+@{
     ViewData["Title"] = "Crear Autor";
 }
 
@@ -8,15 +10,15 @@
         <div class="card-body">
             <div class="form-group">
                 <label for="Nombre">Nombres</label>
-                <input type="text" class="form-control">
+                <input asp-for="Nombres" type="text" class="form-control">
             </div>
             <div class="form-group">
                 <label for="Apellidos">Apellidos</label>
-                <input type="text" class="form-control">
+                <input asp-for="Apellidos" type="text" class="form-control">
             </div>
             <div class="form-group">
                 <label for="Identificacion">Identitficacion</label>
-                <input type="text" class="form-control">
+                <input asp-for="Identificacion" type="text" class="form-control">
             </div>
         </div>
         <div class="card-footer">

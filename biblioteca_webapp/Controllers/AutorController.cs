@@ -21,8 +21,6 @@ namespace biblioteca_webapp.Controllers {
 
         }
 
-
-
         [HttpGet]
         public async Task<IActionResult> Index() {
             // Inicializa la lista de autores
@@ -45,9 +43,6 @@ namespace biblioteca_webapp.Controllers {
             return View(lst);
         }
 
-
-
-
         public async Task<IActionResult> Edit(int id) {
             // Conectar el From (Controller) - API [ApiBibliotec]
             // Ejecuta un Get y guarda los resultados en la varianle result
@@ -69,6 +64,18 @@ namespace biblioteca_webapp.Controllers {
             return View();
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Create(AutorCreacionDTO autorCreacionDTO) {
+            if (ModelState.IsValid) {
+                var json = JsonConvert.SerializeObject(autorCreacionDTO);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var response = await _httpClient.PostAsync($"{url_base}{api_base}", content);
+                if (response.IsSuccessStatusCode)
+                    return RedirectToAction(nameof(Index));
+                ModelState.AddModelError("", "Error al actualizar el autor");
+            }
+            return View(autorCreacionDTO);
+        }
 
         [HttpPost]        
         public async Task<IActionResult> Edit(int id, AutorCreacionDTO autorDTO) {
@@ -85,7 +92,6 @@ namespace biblioteca_webapp.Controllers {
             }
             return View(autorDTO);
         }
-
 
     }
 }
