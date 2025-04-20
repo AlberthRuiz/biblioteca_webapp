@@ -46,7 +46,7 @@ namespace biblioteca_webapp.Controllers {
         public async Task<IActionResult> Edit(int id) {
             // Conectar el From (Controller) - API [ApiBibliotec]
             // Ejecuta un Get y guarda los resultados en la varianle result
-            var result = await _httpClient.GetAsync( $"{url_base}{api_base}/detalle/{id}");
+            var result = await _httpClient.GetAsync($"{url_base}{api_base}/detalle/{id}");
             // Valida que status code se OK (200)
             if (!result.IsSuccessStatusCode)
                 // Caso no sea OK envia un BadRequest como respuesta a la vista
@@ -56,7 +56,7 @@ namespace biblioteca_webapp.Controllers {
             var content = await result.Content.ReadAsStringAsync();
             // Deserializar el contenido (formato JSON) a formato Lista Autores
             // Una vez deserializado se alamecena en la variable lst
-            var autorDTO = JsonConvert.DeserializeObject<AutorCreacionDTO>(content)!;            
+            var autorDTO = JsonConvert.DeserializeObject<AutorCreacionDTO>(content)!;
             return View(autorDTO);
         }
 
@@ -77,20 +77,34 @@ namespace biblioteca_webapp.Controllers {
             return View(autorCreacionDTO);
         }
 
-        [HttpPost]        
+        [HttpPost]
         public async Task<IActionResult> Edit(int id, AutorCreacionDTO autorDTO) {
             if (ModelState.IsValid) {
                 var json = JsonConvert.SerializeObject(autorDTO);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-                var response = await _httpClient.PutAsync(  $"{url_base}{api_base}/{id}", content);
-
+                var response = await _httpClient.PutAsync($"{url_base}{api_base}/{id}", content);
                 if (response.IsSuccessStatusCode)
                     return RedirectToAction(nameof(Index));
 
                 ModelState.AddModelError("", "Error al actualizar el autor");
             }
             return View(autorDTO);
+        }
+        public async Task<IActionResult> Delete(int id) {
+            var result = await _httpClient.GetAsync($"{url_base}{api_base}/{id}");
+            if (!result.IsSuccessStatusCode)
+                return NotFound();
+            var content = await result.Content.ReadAsStringAsync();
+            var autorDTO = JsonConvert.DeserializeObject<AutorConLibrosDTO>(content)!;
+            return View(autorDTO);
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> DeleteConfirmed(int id) {
+            var result = await _httpClient.DeleteAsync($"{url_base}{api_base}/{id}");            
+            if (result.IsSuccessStatusCode)
+                return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Delete));
         }
 
     }

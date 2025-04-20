@@ -1,0 +1,50 @@
+﻿@model biblioteca_webapp.DTO.AutorConLibrosDTO
+
+@{
+    ViewData["Title"] = "Eliminar Autor";
+}
+
+<h1>Eliminar Autor</h1>
+
+<div class="alert alert-danger">
+    <h3>¿Está seguro que desea eliminar este autor?</h3>
+    <p>Esta acción no se puede deshacer y eliminará todos los libros asociados.</p>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header bg-danger text-white">
+        <h5 class="mb-0">Información del autor a eliminar</h5>
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-2">ID:</dt>
+            <dd class="col-sm-10">@Model.ID</dd>
+
+            <dt class="col-sm-2">Nombre:</dt>
+            <dd class="col-sm-10">@Model.NombresCompletos</dd>
+        </dl>
+
+        @if (Model.Libros != null && Model.Libros.Any()) {
+            <div class="mt-3">
+                <h6 class="text-danger">Se eliminarán también los siguientes libros:</h6>
+                <ul class="list-group">
+                    @foreach (var libro in Model.Libros) {
+                        <li class="list-group-item">@libro.Titulo</li>
+                    }
+                </ul>
+            </div>
+        }
+    </div>
+</div>
+
+<form asp-action="DeleteConfirmed" method="post">
+    <input type="hidden" name="id" value="@Model.ID" />
+    <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-danger">
+            <i class="bi bi-trash"></i> Confirmar eliminación
+        </button>
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            <i class="bi bi-x-circle"></i> Cancelar
+        </a>
+    </div>
+</form>
