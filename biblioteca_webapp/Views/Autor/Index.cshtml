@@ -1,0 +1,47 @@
+﻿@using biblioteca_webapp.DTO
+@model IEnumerable<AutorDTO>
+@{
+
+    ViewData["Title"] = "Autores";
+}
+<div class="card">
+    <div class="card-header">
+        <div class="col-2">
+            <h5 >Autores</h5>
+        </div>
+        <div class="col">
+            <a asp-action="Create" class="btn btn-primary"> Agregar</a>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col text-center">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Id</th>
+                            <th scope="col">Autor</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (AutorDTO item in Model) {
+                            <tr>
+                                <th scope="row">@item.ID</th>
+                                <td>@item.NombresCompletos</td>
+                                <td>
+                                    <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-outline-primary"> Editar</a>
+                                    <a asp-route-id="@item.ID" class="btn btn-outline-danger"> Eliminar</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
