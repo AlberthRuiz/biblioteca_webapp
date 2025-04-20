@@ -31,7 +31,21 @@ namespace biblioteca_webapp.Controllers {
             ViewBag.autores = autores;
             return View();
         }
-        
+
+        [HttpPost]
+        public async Task<IActionResult> Create(LibroConAutorDTO libroConAutorDTO) {
+
+            var json = JsonConvert.SerializeObject(libroConAutorDTO);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await _httpClient.PostAsync($"{url_base}", content);
+            if (response.IsSuccessStatusCode)
+                return RedirectToAction(nameof(Index));
+
+            var autores = await obtenerAutores();
+            ViewBag.autores = autores;
+            return View();
+        }
+
         private async Task<IEnumerable<AutorDTO>> obtenerAutores() {
             List<AutorDTO> lst = new List<AutorDTO>();
             var result = await _httpClient.GetAsync($"http://localhost:5173/api/autores");
